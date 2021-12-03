@@ -1,0 +1,21 @@
+{
+  "name": "aws-cost-saving-lambda",
+  "version": "1.0.0",
+  "description": "It provides a function to save cost by periodically stopping unnecessary AWS resources.",
+  "devDependencies": {
+    "serverless": "^2.68.0",
+    "serverless-prune-plugin": "^1.6.1"
+  },
+  "scripts": {
+    "deploy": "serverless deploy --verbose",
+    "remove": "serverless remove --verbose"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nekochans/aws-cost-saving-lambda.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nekochans/aws-cost-saving-lambda/issues"
+  },
+  "homepage": "https://github.com/nekochans/aws-cost-saving-lambda#readme"
+}

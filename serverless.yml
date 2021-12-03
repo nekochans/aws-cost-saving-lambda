@@ -1,0 +1,44 @@
+service: aws-cost-saving-lambda
+
+frameworkVersion: '>=2.0.0 <3.0.0'
+
+plugins:
+  - serverless-prune-plugin
+
+provider:
+  name: aws
+  runtime: go1.x
+  stage: ${env:DEPLOY_STAGE}
+  region: ${env:AWS_REGION}
+  profile: ${env:AWS_PROFILE}
+  logRetentionInDays: 3
+  lambdaHashingVersion: 20201221
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - rds:StartDBCluster
+            - rds:StopDBCluster
+          Resource: "*"
+  environment:
+    TARGET_CLUSTER_LIST: ${env:TARGET_CLUSTER_LIST}
+
+custom:
+  defaultStage: dev
+  prune:
+    automatic: true
+    number: 1
+
+package:
+  patterns:
+    - '!./**'
+    - ./bin/**
+
+functions:
+  haltRds:
+    handler: bin/haltrds
+    events:
+      - schedule:
+          rate: rate(1 minute)
+          enabled: true
