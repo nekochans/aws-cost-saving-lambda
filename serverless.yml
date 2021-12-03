@@ -22,7 +22,7 @@ provider:
             - rds:StopDBCluster
           Resource: "*"
   environment:
-    TARGET_CLUSTER_LIST: ${env:TARGET_CLUSTER_LIST}
+    TARGET_RDS_CLUSTER_LIST: ${env:TARGET_RDS_CLUSTER_LIST}
 
 custom:
   defaultStage: dev
