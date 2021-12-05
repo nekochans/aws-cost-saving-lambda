@@ -1,4 +1,4 @@
-.PHONY: build clean deploy test lint format
+.PHONY: build clean deploy test lint format generate-mock
 
 build:
 	GOOS=linux GOARCH=amd64 go build -o bin/haltrds ./cmd/lambda/haltrds/main.go
@@ -23,3 +23,6 @@ lint:
 format:
 	gofmt -l -s -w .
 	goimports -w -l ./
+
+generate-mock:
+	mockgen -source=infrastructure/rds_client.go -destination mock/rds_client.go -package mock

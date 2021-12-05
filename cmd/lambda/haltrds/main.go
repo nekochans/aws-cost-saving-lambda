@@ -8,7 +8,22 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/aws/aws-sdk-go-v2/config"
 )
+
+//nolint:gochecknoinits
+func init() {
+	region := os.Getenv("AWS_REGION")
+
+	ctx := context.Background()
+	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion(region))
+	if err != nil {
+		// TODO ここでエラーが発生した場合、致命的な問題が起きているのでちゃんとしたログを出すように改修する
+		log.Fatalln(err)
+	}
+
+	log.Println(cfg)
+}
 
 type TargetRdsClusterList struct {
 	TargetClusterList []string `json:"targetClusterList"`
