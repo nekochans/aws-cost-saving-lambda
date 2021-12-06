@@ -1,7 +1,7 @@
 .PHONY: build clean deploy test lint format generate-mock
 
 build:
-	GOOS=linux GOARCH=amd64 go build -o bin/haltrds ./cmd/lambda/haltrds/main.go
+	GOOS=linux GOARCH=amd64 go build -o bin/stoprdscluster ./cmd/lambda/stoprdscluster/main.go
 
 clean:
 	rm -rf ./bin

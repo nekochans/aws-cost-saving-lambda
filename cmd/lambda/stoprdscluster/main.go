@@ -33,7 +33,7 @@ func init() {
 func HandleRequest(ctx context.Context, request events.CloudWatchEvent) error {
 	var targetRdsClusterList stoprdscluster.TargetRdsClusterList
 	if err := json.Unmarshal([]byte(os.Getenv("TARGET_RDS_CLUSTER_LIST")), &targetRdsClusterList); err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 	}
 
 	if err := useCase.StopRdsCluster(ctx, targetRdsClusterList); err != nil {

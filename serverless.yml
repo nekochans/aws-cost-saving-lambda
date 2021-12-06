@@ -36,9 +36,9 @@ package:
     - ./bin/**
 
 functions:
-  haltRds:
-    handler: bin/haltrds
+  stopRdsCluster:
+    handler: bin/stoprdscluster
     events:
       - schedule:
-          rate: rate(10 minutes)
-          enabled: true
+          rate: ${env:STOP_RDS_CLUSTER_SCHEDULE_RATE}
+          enabled: ${env:STOP_RDS_CLUSTER_IS_ENABLED}
