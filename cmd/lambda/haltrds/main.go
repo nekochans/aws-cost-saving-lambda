@@ -9,7 +9,11 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/rds"
+	"github.com/nekochans/aws-cost-saving-lambda/usecase/stoprdscluster"
 )
+
+var useCase stoprdscluster.UseCase
 
 //nolint:gochecknoinits
 func init() {
@@ -18,29 +22,23 @@ func init() {
 	ctx := context.Background()
 	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion(region))
 	if err != nil {
-		// TODO ここでエラーが発生した場合、致命的な問題が起きているのでちゃんとしたログを出すように改修する
 		log.Fatalln(err)
 	}
 
-	log.Println(cfg)
-}
+	rdsClient := rds.NewFromConfig(cfg)
 
-type TargetRdsClusterList struct {
-	TargetClusterList []string `json:"targetClusterList"`
+	useCase = stoprdscluster.UseCase{RdsClient: rdsClient}
 }
 
 func HandleRequest(ctx context.Context, request events.CloudWatchEvent) error {
-	log.Println("🐱")
-	log.Println(os.Getenv("TARGET_RDS_CLUSTER_LIST"))
-	log.Println("🐱")
-
-	var targetRdsClusterList TargetRdsClusterList
+	var targetRdsClusterList stoprdscluster.TargetRdsClusterList
 	if err := json.Unmarshal([]byte(os.Getenv("TARGET_RDS_CLUSTER_LIST")), &targetRdsClusterList); err != nil {
+		log.Println(err)
 	}
 
-	log.Println("🐹")
-	log.Println(targetRdsClusterList)
-	log.Println("🐹")
+	if err := useCase.StopRdsCluster(ctx, targetRdsClusterList); err != nil {
+		log.Fatalln(err)
+	}
 
 	return nil
 }

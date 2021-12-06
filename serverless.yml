@@ -40,5 +40,5 @@ functions:
     handler: bin/haltrds
     events:
       - schedule:
-          rate: rate(1 minute)
+          rate: rate(10 minutes)
           enabled: true
